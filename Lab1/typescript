@@ -1,0 +1,491 @@
+Script started on Thu 14 Jan 2021 03:28:45 PM EST
+]0;reynolds@cobra:~/CSC310/Lab1[?1034h[reynolds@cobra Lab1]$ cat exit./myTail NINJA-2  NINJA[4Pc++ myTail.cpp./myTail NINJAc++ myTail.cpp./myTail -2  NINJA[4PNINJAexit[Kcat c[KmyTail;[K.cpp
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+using namespace std; // I probably should have gotten help sooner :/
+
+int main(int argc, char *argv[])
+{
+
+  string numLine;
+  string file;
+  string updateLine;
+  string output;
+  int lineCount;
+  int itCount;
+  char ch;
+  double overSize;
+  double currSize;
+  
+  numLine = argv[1]; // taking in the command line arguments here
+  file = argv[2];
+  
+  lineCount = -(atoi(updateLine.c_str()));
+  
+  fstream in(file.c_str(),ios::in);
+  in.seekg(0,ios::end);
+  while(lineCount > itCount)
+  {
+    currSize++;
+    in.seekg(-1,ios::cur);
+    ch = in.peek();
+    if(ch == '\n') // if it is the end of the line, go to the next line
+    {
+      itCount++;
+    } 
+    if(currSize == overSize) // if the current size is equal to the overall size
+    {
+      in.seekg(0,ios::beg);
+      break; 
+    }
+  }
+  ch = in.peek();
+  if(ch == '\n')
+  {
+    in.seekg(1,ios::cur);
+    while(in.get(ch))
+    {
+      cout << ch;
+     output = ch + output;
+     in.seekg(-1,ios::cur); 
+    }
+    in.close();
+    
+  }
+  cout << output << endl;
+  return 0;
+}]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ cat myWc.cpp
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  string file,option,screen,output;
+  bool lines,words,bytes; // true false flags to denote what needs to be output onto user screen
+  int lineCount,wordCount,byteCount;
+  char curr;
+  char prev = '\n';
+  stringstream ss;
+  // interpretation of command line statement has commenced
+  if (argc == 1)
+  {
+    cout << " Enter your command in the correct format. Refer to 'man wc' for further details." << endl;
+    return -1;
+  }
+  if (argc > 2)
+  {
+    for( int i = 1; i < argc; i++)
+    {
+      if ( i == (argc-1) )
+      {
+        file = argv[i];
+        option = argv[i];
+        break;
+      }
+    }
+    option = option.substr(1,option.length());
+    if(option == "c")
+    {
+      bytes = true;
+    }
+    else if(option == "l")
+    {
+      lines = true;
+    }
+    else if(option == "w")
+    {
+      words = true;
+    }
+    else
+    {
+      cout << "Invalid Command"<< "\n Your options are -c, -l, and -w." <<  "\ninfo can be provided without these commands as well." <<  "\nEnter Correct Commands Please." << endl;
+      
+    }
+  }
+  else
+  {
+    file = argv[1];
+    lines,words,bytes = true;
+    
+  }
+  //file parsing has commenced
+  fstream in(file.c_str(), ios::in); // file opened read mode
+  in.seekg(0,ios::beg); // starting at the beginning of said file
+  
+  while(in.get(curr))
+  {
+    if(prev != '\n' && prev != '\t' && prev != ' ' && curr == '\n') // This counts nl in the word count bc it is technically a char/word
+    {
+      lineCount++;
+      wordCount++;
+    }
+    else if(prev != '\n' && prev != '\t' && prev != ' ' && curr == '\t') // tabs count as a word
+    {
+      wordCount++;
+    }
+    else if(prev != '\n' && prev != '\t' && prev != ' ' && curr == ' ') // this is the conditions which shows an actual word is present
+    {
+      wordCount++;
+    }
+    else if( curr == '\n' && prev == '\n' ) // this is the condition which shows a new line is present
+    {
+      lineCount++;
+    }
+    
+    
+    
+    byteCount++; // bytes always need updated
+    prev = curr;
+  }
+  
+  in.close(); // file reading mode is over
+  // screen output section
+  if(lines) // all flags need to be checked, therefore , ifs are necessary
+  {
+    screen = screen + "\t";
+    ss << " ";
+    ss << lineCount;
+  }
+  if(words)
+  {
+    screen = screen + "\t";
+    ss << " ";
+    ss << wordCount;
+  }
+  if(bytes)
+  {
+    screen = screen + "\t";
+    ss << " ";
+    ss << byteCount;
+  }
+  ss << " ";
+  ss << file;
+  output = ss.str();
+  cout << output << endl;
+  return 0;
+}]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ cat base.cpp
+#include <iostream>
+using namespace std;
+
+
+class Base
+{
+    public :
+        virtual void iam();
+};
+void Base::iam()
+{
+    cout << "base" << endl;
+}
+
+class DerivedOne : public Base
+{
+
+  public :
+            void iam()
+            {
+              cout << "iam one" << endl;
+            }
+            
+            void iam2()
+            {
+              Base::iam();
+            }
+            
+};
+
+class DerivedTwo : public Base
+{
+  public :
+            void iam()
+            {
+              cout << "iam two" << endl;
+            }
+            
+            void iam2()
+            {
+              Base::iam();
+            }
+};
+
+int main()
+{
+  Base baseClass;
+  baseClass.iam();
+  
+  DerivedOne childOne;
+  childOne.iam();
+  childOne.iam2();
+  
+  DerivedTwo childTwo;
+  childTwo.iam();
+  childTwo.iam2();
+  
+  Base *childOnePoint = &childOne;
+  Base *childTwoPoint = &childTwo;
+  
+  childOnePoint -> iam();
+  childTwoPoint -> iam();
+  
+  return 0;
+  
+}]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ exit
+exit
+
+Script done on Thu 14 Jan 2021 03:29:13 PM EST
+l NINJA-2  NINJA[4Pc++ myTail.cpp./myTail -2  NINJA[4PNINJAcat myTail.cpp[2PWc.cpp++ base.cppat[C[C[C[C[C[C[C[C[C[Kscript[K[K[K[K[K[Kquit
+bash: quit: command not found...
+Similar command is: 'quot'
+]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ quit
+bash: quit: command not found...
+Similar command is: 'quot'
+]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ quit[K[K[K[Kscript
+Script started, file is typescript
+]0;reynolds@cobra:~/CSC310/Lab1[?1034h[reynolds@cobra Lab1]$ exit
+exit
+Script done, file is typescript
+]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ script
+Script started, file is typescript
+]0;reynolds@cobra:~/CSC310/Lab1[?1034h[reynolds@cobra Lab1]$ cat exit./myTail NINJA-2  NINJA[4Pc++ myTail.cpp./myTail NINJAc++ myTail.cpp./myTail -2  NINJA[4PNINJAexit[Kcat c[KmyTail;[K.cpp
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+using namespace std; // I probably should have gotten help sooner :/
+
+int main(int argc, char *argv[])
+{
+
+  string numLine;
+  string file;
+  string updateLine;
+  string output;
+  int lineCount;
+  int itCount;
+  char ch;
+  double overSize;
+  double currSize;
+  
+  numLine = argv[1]; // taking in the command line arguments here
+  file = argv[2];
+  
+  lineCount = -(atoi(updateLine.c_str()));
+  
+  fstream in(file.c_str(),ios::in);
+  in.seekg(0,ios::end);
+  while(lineCount > itCount)
+  {
+    currSize++;
+    in.seekg(-1,ios::cur);
+    ch = in.peek();
+    if(ch == '\n') // if it is the end of the line, go to the next line
+    {
+      itCount++;
+    } 
+    if(currSize == overSize) // if the current size is equal to the overall size
+    {
+      in.seekg(0,ios::beg);
+      break; 
+    }
+  }
+  ch = in.peek();
+  if(ch == '\n')
+  {
+    in.seekg(1,ios::cur);
+    while(in.get(ch))
+    {
+      cout << ch;
+     output = ch + output;
+     in.seekg(-1,ios::cur); 
+    }
+    in.close();
+    
+  }
+  cout << output << endl;
+  return 0;
+}]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ cat myWc.cpp
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  string file,option,screen,output;
+  bool lines,words,bytes; // true false flags to denote what needs to be output onto user screen
+  int lineCount,wordCount,byteCount;
+  char curr;
+  char prev = '\n';
+  stringstream ss;
+  // interpretation of command line statement has commenced
+  if (argc == 1)
+  {
+    cout << " Enter your command in the correct format. Refer to 'man wc' for further details." << endl;
+    return -1;
+  }
+  if (argc > 2)
+  {
+    for( int i = 1; i < argc; i++)
+    {
+      if ( i == (argc-1) )
+      {
+        file = argv[i];
+        option = argv[i];
+        break;
+      }
+    }
+    option = option.substr(1,option.length());
+    if(option == "c")
+    {
+      bytes = true;
+    }
+    else if(option == "l")
+    {
+      lines = true;
+    }
+    else if(option == "w")
+    {
+      words = true;
+    }
+    else
+    {
+      cout << "Invalid Command"<< "\n Your options are -c, -l, and -w." <<  "\ninfo can be provided without these commands as well." <<  "\nEnter Correct Commands Please." << endl;
+      
+    }
+  }
+  else
+  {
+    file = argv[1];
+    lines,words,bytes = true;
+    
+  }
+  //file parsing has commenced
+  fstream in(file.c_str(), ios::in); // file opened read mode
+  in.seekg(0,ios::beg); // starting at the beginning of said file
+  
+  while(in.get(curr))
+  {
+    if(prev != '\n' && prev != '\t' && prev != ' ' && curr == '\n') // This counts nl in the word count bc it is technically a char/word
+    {
+      lineCount++;
+      wordCount++;
+    }
+    else if(prev != '\n' && prev != '\t' && prev != ' ' && curr == '\t') // tabs count as a word
+    {
+      wordCount++;
+    }
+    else if(prev != '\n' && prev != '\t' && prev != ' ' && curr == ' ') // this is the conditions which shows an actual word is present
+    {
+      wordCount++;
+    }
+    else if( curr == '\n' && prev == '\n' ) // this is the condition which shows a new line is present
+    {
+      lineCount++;
+    }
+    
+    
+    
+    byteCount++; // bytes always need updated
+    prev = curr;
+  }
+  
+  in.close(); // file reading mode is over
+  // screen output section
+  if(lines) // all flags need to be checked, therefore , ifs are necessary
+  {
+    screen = screen + "\t";
+    ss << " ";
+    ss << lineCount;
+  }
+  if(words)
+  {
+    screen = screen + "\t";
+    ss << " ";
+    ss << wordCount;
+  }
+  if(bytes)
+  {
+    screen = screen + "\t";
+    ss << " ";
+    ss << byteCount;
+  }
+  ss << " ";
+  ss << file;
+  output = ss.str();
+  cout << output << endl;
+  return 0;
+}]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ cat base.cpp
+#include <iostream>
+using namespace std;
+
+
+class Base
+{
+    public :
+        virtual void iam();
+};
+void Base::iam()
+{
+    cout << "base" << endl;
+}
+
+class DerivedOne : public Base
+{
+
+  public :
+            void iam()
+            {
+              cout << "iam one" << endl;
+            }
+            
+            void iam2()
+            {
+              Base::iam();
+            }
+            
+};
+
+class DerivedTwo : public Base
+{
+  public :
+            void iam()
+            {
+              cout << "iam two" << endl;
+            }
+            
+            void iam2()
+            {
+              Base::iam();
+            }
+};
+
+int main()
+{
+  Base baseClass;
+  baseClass.iam();
+  
+  DerivedOne childOne;
+  childOne.iam();
+  childOne.iam2();
+  
+  DerivedTwo childTwo;
+  childTwo.iam();
+  childTwo.iam2();
+  
+  Base *childOnePoint = &childOne;
+  Base *childTwoPoint = &childTwo;
+  
+  childOnePoint -> iam();
+  childTwoPoint -> iam();
+  
+  return 0;
+  
+}]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ exit
+exit
+Script done, file is typescript
+]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ cp typescript /scratch/csc310/last_fm/Labs[1P/Labs[1P/Labs[1P/Labs[1P/Labs[1P/Labs[1P/Labs[1P/Labsr/Labse/Labsy/Labsn/Labso/Labsl/Labsd/Labss/Labs
+]0;reynolds@cobra:~/CSC310/Lab1[reynolds@cobra Lab1]$ cp typescript /scratch/csc310/reynolds/Labs[C[1P /scratch/csc310/reynolds/Labs[1P /scratch/csc310/reynolds/Labs[1P /scra
