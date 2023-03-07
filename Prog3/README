@@ -1,0 +1,28 @@
+When designing the B-Tree Class, There are many things one must consider, such as constructors for the tree, how the tree will be updated, how new keys will be put into the B-Tree, how the tree will handle splits and recombining of branches, and how the tree will handle searches.
+There will be a BTree constructor which will be named something like BTree() which uses an empty BTNode with it's address to create a new BTree. 
+A BTNode will consist of a currSize int, a contents of the node ValueArray, and a child of the BTNode IndexArray.
+Creating a B-Tree will go something along the lines of this.
+You would need to get the address for the root node of the BTree from the index file and put it into the dummy node's root for it's BTree.
+The File would need to be opened next using the command line and the Album Class's in stream overloaded operator would read in the album from the file that was just opened.
+The integer -1 will be used to denote whether a file is present in this step or not.
+After the file is read in, you will then create a new BTnode with the read in information from the file.
+You then will insert this BTnode with the information inside of it into the B-Tree.
+If a split occurs, there will be a split method which will handle the movement of the root node address to make sure this data does not get corrupted nor misplaced.
+These are the public methods.
+void writeHeader (char * fileName);
+	void insert (keyType key); - inserts a new BTNode into the B Tree with a specified key
+	void reset (char * filename); - wipes the data from a given index file to get rid of an existing B tree
+	void printTree(); - calls to the private method print tree and recursively prints out a B Tree by passing in a rootAddr
+ Calls to the private method of the same name to print out the current B-Tree using the information given.
+	int getHeight(); - Returns the height of a B tree by counting through the amount of leaf checks gone through
+	bool search (string key); - Returns if a node is in a B Tree with a specified key
+	int countLeaves(); - calls to the private count leaves method by passing in a root of B Tree Address
+ These are the private methods.
+ void printTree (int rootAddr); - Goes through each node within a B Tree and gathers it's information to be print out to the screen
+ int findAddr (keyType key, BTNode t, int tAddr);
+	void insert (keyType key, int recAddr, int oneAddr, int twoAddr); - Is called to by a public inset method to accurately add a node into it's proper position within a BTree
+        BTNode getNode (int recAddr); - gets the address of a node within a Btree
+        void placeNode (keyType k,int recAddr,int oneAddr,int twoAddr);
+	bool isLeaf (int recAddr); - Determines whether the given record address contains a leaf through the use of the return of the -1 integer.
+	int countLeaves(int recAddr); - Recursively counts the leaves within a BTree
+        void splitNode (keyType& key,int recAddr,int& oneAddr,int& twoAddr); - handles the splitting of the BTree when the order limit is reached within a BTree

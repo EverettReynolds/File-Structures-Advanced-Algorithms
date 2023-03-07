@@ -1,0 +1,34 @@
+The goal needing to be achieved with the project was to solve an issue with a small bookstore's record keeping mishaps.
+The program should allow for any user of the system to update price and inventory for specific books located using ISBN.
+This program also includes a feature to add and remove books as new ones are starting to be carried or old ones as discontinued from the store respectively.
+Three files were needed to make this program run.
+You would need the original binary file already kept by the bookstore which contains all of their current stock of books.
+You would need a transaction list file which tells the program what needs to be done within the database's file records.
+You would need a new output file which is essentially a new file with updated records after your program carried out the actions of the transaction list file.
+To carry out what is needed to be done on the files above, you would first need to make sure all file names are unique compared to one another as this can cause confusion as to which file is which.
+Next, all isbns were put into a map at all of their individually defined offsets in the original master file.
+This was achieved by finding the size of an example BookRec and multiplying it by the individual offset of each record plus one so no records overlap one another while carrying out actions upon them.
+The map is used to parse through every record and what would be needed to be written into the output file.
+Each action has an assigned enum value of 0-3, which is useful when trying to figure out which operation needs to be carried out.
+I used the command line in order to split up the three files, as they were inputted on starting the program.
+There was a temp file made to copy.out so that the integrity of our master file can be preserved while carrying out operations.
+The Add operation consisted of finding whether the record already existed.
+If it did, I wrote to ERRORS this finding.
+Then, I wrote this record to the outfile, and added the new ISBN and offset to the map.
+The Delete operation consisted of finding whether the record was in the file or not.
+If it wasn't I wrote to ERRORS this finding.
+If it was in the file, I erased the record from the map
+The change onhand was by far the trickiest operation.
+It involved determining whether the record existed within the file.
+If the record didn't I recorded this finding to ERRORS and discontinued the action.
+If it existed, I went to the offset based on the map value, and changed the record's onhand value.
+There was a check to see if the record's offhand value was negative, as we cannot owe books to anyone as we are not a library.
+The offhand value was made to zero if such was the case.
+Otherwise, I updated the record's byte offset and wrote it to the outfile.
+The change price consisted of finding if the record existed in the file.
+If it did not, I reported my finding to ERRORS and went on with my day.
+However if it did exist, I went to it's offset based on map value.
+The record's byte value's offset was updated and I wrote it to outfile. 
+After all of these actions were taken, I updated our final file based on the data collected from the outfile.
+Errors and data were printed out to the user and all file streams were closed.
+Note: It took me a while to to understand all of this, therefore not all of these features were coded :(

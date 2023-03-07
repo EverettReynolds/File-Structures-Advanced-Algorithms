@@ -1,0 +1,33 @@
+public :
+       File (const File& otherFile); // copy instructor (deep copy)
+       File (const char name[], const char pmode[], // Constructor to define arguments (explicit constructor)
+             const char size[], const char stamp[]); 
+       File (); // Default Constructor
+       File & operator = (const File& otherFile); // overloading with deep copy
+       string getSize() const; // bunches of getters and setters
+       string getName() const;
+       string getPmode() const;
+       string getStamp() const;
+       int recordSize() const;
+       void flagAsDir(); // marks it as directory not a file
+       bool isADir() const; // getter
+
+   private :
+       char name[81], pmode[5], size[7], stamp[16]; // These declare variable sizes. Getters and setters are needed due the privacy of the variables.
+       bool ADir;
+       
+This is the general plan surrounding the File Class.
+
+The cf option will be a method which has no return values. It essentially compresses the file into a tar format.
+You would first check to see if the option was selected through boolean flag checking. The utiliy.cpp class comes in handy due to much of it's code held within.
+This helps determine a file's size , protection mode, size, and time stamp.
+Once a method which does this is created, you can use it with the cf option.
+A vector will store all files found using the method made above since a tar file can be made up of multiple files.
+If a File object is a text file, it will have all of it's characters come after it, whereas if it's a directory, it will not.
+The same vector will be used to write out the binary tar file once we are done with all above operations.
+The xf option is a little different from the cf option.
+We will read in from a tar file and recreate all the files and directories it represents. 
+The first line represents the number of files and we can use that as a while condition to perform operations.
+File objects are read in and if it's a directory, a new directory is made.
+If it's not a directory, an array of chars is created which will be from the tar file to be written out to a new file.
+System commands will be used to update protection mode and time stamp of the file so the tar file and new file have equivalent values for both.
